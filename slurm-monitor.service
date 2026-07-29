@@ -1,0 +1,17 @@
+[Unit]
+Description=Slurm Monitor Web Dashboard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/opt/slurm-monitor
+EnvironmentFile=-/etc/default/slurm-monitor
+ExecStart=/usr/bin/python3 /opt/slurm-monitor/server.py
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

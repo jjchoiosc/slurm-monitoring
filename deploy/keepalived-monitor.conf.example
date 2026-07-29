@@ -1,0 +1,43 @@
+# Example keepalived stanza for Slurm monitor VIP only.
+# Replace IPs, interface, and auth_pass for your site.
+# Install health script to /usr/local/sbin/check-slurm-monitor
+
+global_defs {
+    router_id SLURM_MONITOR_MASTER
+    enable_script_security
+    script_user root
+}
+
+vrrp_script check_slurm_monitor {
+    script "/usr/local/sbin/check-slurm-monitor"
+    interval 5
+    timeout 6
+    fall 2
+    rise 2
+}
+
+vrrp_instance SLURM_MONITOR_VIP {
+    state MASTER
+    interface eth0
+    virtual_router_id 79
+    priority 150
+    advert_int 1
+
+    authentication {
+        auth_type PASS
+        auth_pass CHANGE_ME
+    }
+
+    unicast_src_ip 192.168.31.177
+    unicast_peer {
+        192.168.31.178
+    }
+
+    virtual_ipaddress {
+        192.168.31.179/24 dev eth0
+    }
+
+    track_script {
+        check_slurm_monitor
+    }
+}

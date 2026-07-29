@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -f /etc/default/slurm-monitor-ha ]]; then
+  # shellcheck disable=SC1091
+  source /etc/default/slurm-monitor-ha
+fi
+PORT="${SLURM_MONITOR_PORT:-8120}"
+curl --silent --show-error --fail --max-time 5 \
+  "http://127.0.0.1:${PORT}/api/health" >/dev/null

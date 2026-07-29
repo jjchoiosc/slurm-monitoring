@@ -1,0 +1,7 @@
+.env
+*.pyc
+__pycache__/
+*.bak*
+*.orig
+.DS_Store
+*.tar.gz
